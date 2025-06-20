@@ -13,6 +13,16 @@ Librería Python para automatizar el envío de mensajes en WhatsApp Web usando P
 
 ## Instalación
 
+1. Clona el repositorio:
+```bash
+git clone https://github.com/jrivero20/whatsapp_automation.git
+```
+2. Navega a la carpeta del proyecto:
+```bash
+cd whatsapp_automation/prueba-tecnica.2.0
+```
+
+3. Instala el paquete
 ```bash
 pip install whatsapp-automation
 ```
@@ -20,6 +30,7 @@ pip install whatsapp-automation
 ### Instalar dependencias de Playwright
 
 ```bash
+pip install playwright
 playwright install chromium
 ```
 
@@ -67,7 +78,7 @@ whatsapp-send +1234567890 "Mi mensaje" --headless
 
 ## Limitaciones
 
-- Requiere escanear QR la primera vez
+- Requiere escanear QR
 - Funciona solo mientras la sesión esté activa
 - Respeta los límites de WhatsApp
 
