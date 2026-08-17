@@ -11,10 +11,10 @@ Solución profesional de **Robotic Process Automation (RPA)** para WhatsApp Web 
   - **Page Object Model (POM)**: Clases `BasePage`, `LoginPage` y `ChatPage` que aíslan selectores y manipulación del DOM.
   - **Facade Pattern**: `WhatsAppBotFacade` simplifica el flujo completo a una sola llamada de método.
   - **Singleton Pattern**: `SessionManager` centraliza el ciclo de vida del navegador y el perfil de usuario.
-  - **Builder / Strategy Pattern**: `MessageBuilder` y `MerzaDesignPatternsStrategy` estructuran de forma flexible el mensaje con el encabezado `"merza"` y el detalle técnico.
-- 🚀 **Ejecución con 1 Clic (`.bat`)**: Archivo `ejecutar_bot.bat` para ejecutar en Windows con doble clic; autoverifica dependencias e instala Chromium de ser necesario.
-- 🌐 **Selectores Robustos y Multiidioma**: Basados en roles, atributos `data-*` y estructuras visuales, funcionando en inglés, español y otros idiomas.
-- 📝 **Configuración Centralizada**: Archivo `config.json` para definir números por defecto, notas y timeouts.
+  - **Builder / Strategy Pattern**: `MessageBuilder` y `TechnicalReportStrategy` estructuran de forma flexible el reporte técnico con el saludo a Merza, datos del autor (Jose Rivero), enlace al repositorio y detalle de patrones.
+- 🚀 **Ejecución con 1 Clic (`.bat`)**: Archivo `ejecutar_bot.bat` para Windows; autoverifica y crea el entorno virtual aislado `.venv`, instala dependencias e instala Chromium automáticamente.
+- 🌐 **Interacción 100% por Interfaz (UI)**: Basada en selectores exactos del DOM (`data-testid`, `data-tab`, roles accesibles y editor Lexical), funcionando independientemente del tema (modo claro/oscuro) y del destinatario (números o nombres).
+- 📝 **Configuración Centralizada**: Archivo `config.json` para definir destinatario por defecto, notas y timeouts.
 
 ---
 
@@ -40,7 +40,7 @@ Solución profesional de **Robotic Process Automation (RPA)** para WhatsApp Web 
             +-------------------+ +-------------------+ +-------------------+
             | PATRÓN SINGLETON  | |    PATRÓN POM     | | PATRÓN STRATEGY   |
             |  SessionManager   | | - BasePage        | |  MessageBuilder   |
-            | - Persistent Data | | - LoginPage       | | - MerzaStrategy   |
+            | - Persistent Data | | - LoginPage       | | - TechReportStrat |
             | - Cookies/Storage | | - ChatPage        | | - CustomStrategy  |
             +-------------------+ +-------------------+ +-------------------+
 ```
@@ -54,7 +54,7 @@ Solución profesional de **Robotic Process Automation (RPA)** para WhatsApp Web 
 3. **Singleton (Gestor de Sesión)**:
    - `SessionManager`: Garantiza una única instancia de contexto del navegador persistente en disco.
 4. **Builder / Strategy**:
-   - `MessageBuilder`: Permite componer el mensaje de la asignación `"merza"` con la documentación técnica de patrones y notas adicionales.
+   - `MessageBuilder`: Permite componer el reporte técnico de patrones y notas adicionales de forma modular.
 
 ---
 
@@ -64,15 +64,15 @@ Solución profesional de **Robotic Process Automation (RPA)** para WhatsApp Web 
 Simplemente haz **doble clic** en `ejecutar_bot.bat`.
 
 El archivo `.bat`:
-1. Verifica la presencia de Python.
+1. Detecta o crea automáticamente el entorno virtual aislado `.venv`.
 2. Instala automáticamente `playwright` y `playwright install chromium` si faltan.
-3. Inicia el bot y solicita el número telefónico por consola si no está en `config.json`.
+3. Inicia el bot y solicita el contacto o número de teléfono por consola si no está en `config.json`.
 4. Mantiene abierta la consola para ver los resultados del envío.
 
 ### Opción 2: Desde Línea de Comandos (Python)
 
 ```bash
-# Envío con mensaje predeterminado "merza" + patrones de diseño:
+# Envío con Reporte Técnico predeterminado:
 python main.py --phone +584121234567
 
 # Envío con mensaje personalizado:
@@ -87,9 +87,9 @@ python main.py
 ```python
 from whatsapp_automation import WhatsAppBotFacade
 
-# Envío del mensaje "merza" con documentación de patrones:
+# Envío del reporte técnico de patrones de diseño:
 with WhatsAppBotFacade(headless=False) as bot:
-    bot.send_merza_pattern_message("+584121234567")
+    bot.send_technical_report("+584121234567")
 
 # Envío de mensaje personalizado:
 with WhatsAppBotFacade(headless=False) as bot:
@@ -108,7 +108,10 @@ Puedes preconfigurar tu ejecución editando `config.json`:
   "session_dir": "session_data",
   "headless": false,
   "wait_time": 2,
-  "message_mode": "merza_patterns",
+  "message_mode": "technical_report",
+  "recipient": "Merza",
+  "developer": "Jose Rivero",
+  "repo_url": "https://github.com/jrivero20/whatsapp_automation",
   "custom_message": "",
   "custom_note": "Entregable RPA con persistencia y patrones de diseño."
 }
@@ -119,11 +122,18 @@ Puedes preconfigurar tu ejecución editando `config.json`:
 ## 📁 Estructura del Proyecto
 
 ```
-RPA/
+whatsapp_automation/
+├── .git/                                # Repositorio Git
+├── .gitignore                           # Exclusión de .venv y session_data
 ├── ejecutar_bot.bat                     # Script ejecutable para Windows
 ├── main.py                              # Entrypoint principal del bot RPA
 ├── config.json                          # Configuración de ejecución
 ├── requirements.txt                     # Dependencias de Python
+├── setup.py / pyproject.toml            # Empaquetado y metadatos
+├── tests/
+│   └── test_bot.py                      # Suite de pruebas unitarias
+├── example/
+│   └── example.py                       # Script de ejemplo interactivo
 └── whatsapp_automation/
     ├── __init__.py                      # Exportación de clases y facade
     ├── core/
@@ -135,13 +145,9 @@ RPA/
     │   ├── base_page.py                 # POM: Clase base y esperas
     │   ├── login_page.py                # POM: Login, QR y modales
     │   └── chat_page.py                 # POM: Búsqueda, chat y envío
-    ├── services/
-    │   ├── __init__.py
-    │   └── message_builder.py           # Builder/Strategy: Formateador "merza" + patrones
-    ├── whatsapp_automation.py           # Módulo principal y compatibilidad
-    ├── cli.py                           # CLI de comandos
-    └── example/
-        └── example.py                   # Script de ejemplo interactivo
+    └── services/
+        ├── __init__.py
+        └── message_builder.py           # Builder/Strategy: Reporte técnico
 ```
 
 ---

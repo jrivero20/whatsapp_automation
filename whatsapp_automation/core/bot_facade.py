@@ -12,7 +12,7 @@ from typing import Optional
 from .session_manager import SessionManager
 from ..pages.login_page import LoginPage
 from ..pages.chat_page import ChatPage
-from ..services.message_builder import MessageBuilder, MerzaDesignPatternsStrategy, CustomMessageStrategy
+from ..services.message_builder import MessageBuilder, TechnicalReportStrategy, CustomMessageStrategy
 
 logger = logging.getLogger("WhatsAppBot.Facade")
 
@@ -92,13 +92,23 @@ class WhatsAppBotFacade:
             
         return success
 
-    def send_merza_pattern_message(self, phone: str, custom_note: Optional[str] = None) -> bool:
+    def send_technical_report(
+        self,
+        phone: str,
+        recipient: str = "Merza",
+        developer: str = "Jose Rivero",
+        repo_url: str = "https://github.com/jrivero20/whatsapp_automation",
+        custom_note: Optional[str] = None
+    ) -> bool:
         """
-        Construye y envía el mensaje de la asignación con el encabezado 'merza'
-        y el detalle técnico de los patrones de diseño aplicados.
+        Construye y envía el reporte técnico con el saludo a Merza,
+        datos del desarrollador (Jose Rivero), enlace al repositorio y patrones de diseño.
         """
-        print("📐 Generando mensaje estructurado con patrones de diseño...")
-        builder = MessageBuilder(MerzaDesignPatternsStrategy())
+        print("📐 Generando reporte técnico de automatización y patrones de diseño...")
+        builder = MessageBuilder(TechnicalReportStrategy())
+        builder.set_recipient(recipient)
+        builder.set_developer(developer)
+        builder.set_repo_url(repo_url)
         if custom_note:
             builder.set_custom_note(custom_note)
         

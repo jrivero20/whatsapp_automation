@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "whatsapp-automation"
 dynamic = ["version"]
-description = "Librería Python para automatizar envío de mensajes en WhatsApp Web"
+description = "Librería Python y Bot RPA para automatizar WhatsApp Web con Playwright"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Alexnader Rivero", email = "jasealexander14@gmail.com"},
+    {name = "Jose Rivero", email = "jasealexander14@gmail.com"},
 ]
-keywords = ["whatsapp", "automation", "playwright", "messaging"]
+keywords = ["whatsapp", "automation", "playwright", "messaging", "rpa"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -40,9 +40,9 @@ dev = [
 whatsapp-send = "whatsapp_automation.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/tu-usuario/whatsapp-automation"
-Repository = "https://github.com/tu-usuario/whatsapp-automation.git"
-Issues = "https://github.com/tu-usuario/whatsapp-automation/issues"
+Homepage = "https://github.com/jrivero20/whatsapp_automation"
+Repository = "https://github.com/jrivero20/whatsapp_automation.git"
+Issues = "https://github.com/jrivero20/whatsapp_automation/issues"
 
 [tool.setuptools_scm]
 

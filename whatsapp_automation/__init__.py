@@ -10,9 +10,9 @@ from .pages.chat_page import ChatPage
 from .services.message_builder import (
     MessageBuilder,
     IMessageStrategy,
-    MerzaDesignPatternsStrategy,
+    TechnicalReportStrategy,
     CustomMessageStrategy,
-    create_merza_pattern_message
+    create_technical_report_message
 )
 from .whatsapp_automation import WhatsAppAutomation, send_whatsapp_message
 
@@ -26,9 +26,9 @@ __all__ = [
     "ChatPage",
     "MessageBuilder",
     "IMessageStrategy",
-    "MerzaDesignPatternsStrategy",
+    "TechnicalReportStrategy",
     "CustomMessageStrategy",
-    "create_merza_pattern_message",
+    "create_technical_report_message",
     "WhatsAppAutomation",
     "send_whatsapp_message",
 ]

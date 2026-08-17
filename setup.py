@@ -5,13 +5,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="whatsapp-automation",
-    version="1.0.0",
-    author="Alexnader Rivero",
+    version="2.0.0",
+    author="Jose Rivero",
     author_email="jasealexander14@gmail.com",
-    description="Librería Python para automatizar envío de mensajes en WhatsApp Web",
+    description="Librería Python y Bot RPA para automatizar WhatsApp Web con Playwright",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/tu-usuario/whatsapp-automation",
+    url="https://github.com/jrivero20/whatsapp_automation",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",

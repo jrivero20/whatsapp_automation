@@ -20,18 +20,20 @@ from whatsapp_automation import (
     LoginPage,
     ChatPage,
     MessageBuilder,
-    MerzaDesignPatternsStrategy,
+    TechnicalReportStrategy,
     CustomMessageStrategy,
-    create_merza_pattern_message
+    create_technical_report_message
 )
 
 
 class TestMessageBuilderAndStrategy(unittest.TestCase):
     """Pruebas para el Patrón Builder y Strategy."""
 
-    def test_merza_strategy_output(self):
-        msg = create_merza_pattern_message()
-        self.assertIn("merza", msg)
+    def test_technical_report_strategy_output(self):
+        msg = create_technical_report_message(recipient="Merza", developer="Jose Rivero")
+        self.assertIn("Merza", msg)
+        self.assertIn("Jose Rivero", msg)
+        self.assertIn("https://github.com/jrivero20/whatsapp_automation", msg)
         self.assertIn("Page Object Model", msg)
         self.assertIn("Facade Pattern", msg)
         self.assertIn("Singleton Pattern", msg)
@@ -39,7 +41,7 @@ class TestMessageBuilderAndStrategy(unittest.TestCase):
         self.assertIn("Persistencia de Sesión", msg)
 
     def test_builder_with_custom_note(self):
-        builder = MessageBuilder(MerzaDesignPatternsStrategy())
+        builder = MessageBuilder(TechnicalReportStrategy())
         builder.set_custom_note("Prueba unitaria automatizada")
         msg = builder.build()
         self.assertIn("Prueba unitaria automatizada", msg)

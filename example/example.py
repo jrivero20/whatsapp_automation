@@ -17,13 +17,13 @@ def main():
     print("=" * 60)
     
     try:
-        phone = input("\n📱 Ingresa el número de teléfono con código de país (ej: +584121234567): ").strip()
-        if not phone.startswith("+") or len(phone) < 8:
-            print("❌ Formato inválido. Debe comenzar con '+' y tener al menos 8 caracteres.")
+        phone = input("\n📱 Ingresa el número de teléfono (ej: +584121234567) o contacto: ").strip()
+        if not phone:
+            print("❌ El destinatario no puede estar vacío.")
             return
 
         print("\nSelecciona el tipo de mensaje a enviar:")
-        print("1. Mensaje 'merza' con documentación de Patrones de Diseño (Recomendado)")
+        print("1. Reporte Técnico con Patrones de Diseño (Recomendado)")
         print("2. Mensaje personalizado")
         opcion = input("Opción (1/2, default 1): ").strip()
 
@@ -39,7 +39,7 @@ def main():
             if custom_message:
                 bot.send_message(phone=phone, message=custom_message)
             else:
-                bot.send_merza_pattern_message(phone=phone)
+                bot.send_technical_report(phone=phone)
 
         print("\n✅ ¡Automatización ejecutada exitosamente!")
 

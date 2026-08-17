@@ -8,13 +8,13 @@ import argparse
 from typing import Optional
 
 from .core.bot_facade import WhatsAppBotFacade
-from .services.message_builder import create_merza_pattern_message
+from .services.message_builder import create_technical_report_message
 
 
 class WhatsAppAutomation:
     """
     Clase de automatización compatible con la API anterior,
-    ahora respaldada internamente por WhatsAppBotFacade y SessionManager.
+    respaldada internamente por WhatsAppBotFacade y SessionManager.
     """
     
     def __init__(
@@ -48,7 +48,7 @@ class WhatsAppAutomation:
         """Busca y abre un contacto."""
         if not self.facade.chat_page:
             self.facade.initialize()
-        return self.facade.chat_page.search_contact(phone_or_name)
+        return self.facade.chat_page.search_and_select_contact(phone_or_name)
 
     def send_message(self, message: str) -> bool:
         """Escribe y envía un mensaje en el chat abierto."""
@@ -60,9 +60,22 @@ class WhatsAppAutomation:
         """Envía un mensaje de forma completa y orquestada."""
         return self.facade.send_message(phone=phone, message=message)
 
-    def send_merza_message(self, phone: str, custom_note: Optional[str] = None) -> bool:
-        """Envía el mensaje estructurado con 'merza' y los patrones de diseño."""
-        return self.facade.send_merza_pattern_message(phone=phone, custom_note=custom_note)
+    def send_technical_report(
+        self,
+        phone: str,
+        recipient: str = "Merza",
+        developer: str = "Jose Rivero",
+        repo_url: str = "https://github.com/jrivero20/whatsapp_automation",
+        custom_note: Optional[str] = None
+    ) -> bool:
+        """Envía el reporte técnico con el saludo a Merza y los patrones de diseño."""
+        return self.facade.send_technical_report(
+            phone=phone,
+            recipient=recipient,
+            developer=developer,
+            repo_url=repo_url,
+            custom_note=custom_note
+        )
 
     def close(self):
         """Cierra el navegador y guarda sesión."""
@@ -90,9 +103,9 @@ def main():
         epilog='Ejemplo: python whatsapp_automation.py +1234567890 "Hola Mundo"'
     )
     
-    parser.add_argument('phone', help='Número de teléfono con código de país (ej: +584121234567)')
+    parser.add_argument('phone', help='Número de teléfono o nombre del contacto')
     parser.add_argument('message', nargs='?', default=None,
-                        help='Mensaje a enviar. Si se omite, envía el reporte "merza" con patrones de diseño.')
+                        help='Mensaje a enviar. Si se omite, envía el reporte técnico con patrones de diseño.')
     parser.add_argument('--wait-time', type=int, default=2, 
                         help='Tiempo de espera entre acciones (default: 2)')
     parser.add_argument('--headless', action='store_true',
@@ -111,7 +124,7 @@ def main():
             if args.message:
                 bot.send_message(phone=args.phone, message=args.message)
             else:
-                bot.send_merza_pattern_message(phone=args.phone)
+                bot.send_technical_report(phone=args.phone)
                 
             print("🎉 ¡Proceso finalizado con éxito!")
             

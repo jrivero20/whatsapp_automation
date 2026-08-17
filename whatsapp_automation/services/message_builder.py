@@ -1,7 +1,7 @@
 """
 Módulo de Servicios: Constructor de Mensajes (Builder & Strategy Pattern)
-Responsable de formatear y construir el mensaje que contiene 'merza'
-y la documentación técnica de los patrones de diseño utilizados en el bot.
+Responsable de formatear y construir el mensaje de reporte técnico con la documentación
+de los patrones de diseño, datos del desarrollador (Jose Rivero) y enlace al repositorio.
 """
 
 from abc import ABC, abstractmethod
@@ -18,10 +18,10 @@ class IMessageStrategy(ABC):
         pass
 
 
-class MerzaDesignPatternsStrategy(IMessageStrategy):
+class TechnicalReportStrategy(IMessageStrategy):
     """
-    Estrategia de mensaje que incluye 'merza' y la explicación detallada
-    de los patrones de diseño de software utilizados en la solución RPA.
+    Estrategia de mensaje para el reporte técnico de la solución RPA,
+    incluyendo el saludo a Merza, autor, repositorio y desglose de patrones de diseño.
     """
     
     def __init__(self, patterns: Optional[List[Dict[str, str]]] = None):
@@ -49,13 +49,17 @@ class MerzaDesignPatternsStrategy(IMessageStrategy):
         ]
 
     def build(self, **kwargs) -> str:
-        header = kwargs.get("header", "merza")
+        recipient = kwargs.get("recipient", "Merza")
+        developer = kwargs.get("developer", "Jose Rivero")
+        repo_url = kwargs.get("repo_url", "https://github.com/jrivero20/whatsapp_automation")
         timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         
         lines = [
-            f"*{header}*",
+            f"Hola {recipient},",
             "",
             "🤖 *BOT DE AUTOMATIZACIÓN WHATSAPP (RPA)*",
+            f"👤 *Desarrollador:* {developer}",
+            f"🔗 *Repositorio:* {repo_url}",
             f"📅 _Ejecución automatizada: {timestamp}_",
             "",
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
@@ -86,7 +90,7 @@ class CustomMessageStrategy(IMessageStrategy):
     """Estrategia para enviar mensajes de texto libres personalizados."""
     
     def build(self, **kwargs) -> str:
-        text = kwargs.get("text", "merza")
+        text = kwargs.get("text", "Hola Merza")
         return text
 
 
@@ -96,15 +100,23 @@ class MessageBuilder:
     """
     
     def __init__(self, strategy: Optional[IMessageStrategy] = None):
-        self._strategy: IMessageStrategy = strategy or MerzaDesignPatternsStrategy()
+        self._strategy: IMessageStrategy = strategy or TechnicalReportStrategy()
         self._params: Dict[str, any] = {}
 
     def set_strategy(self, strategy: IMessageStrategy) -> "MessageBuilder":
         self._strategy = strategy
         return self
 
-    def set_header(self, header: str) -> "MessageBuilder":
-        self._params["header"] = header
+    def set_recipient(self, recipient: str) -> "MessageBuilder":
+        self._params["recipient"] = recipient
+        return self
+
+    def set_developer(self, developer: str) -> "MessageBuilder":
+        self._params["developer"] = developer
+        return self
+
+    def set_repo_url(self, repo_url: str) -> "MessageBuilder":
+        self._params["repo_url"] = repo_url
         return self
 
     def set_custom_note(self, note: str) -> "MessageBuilder":
@@ -124,9 +136,17 @@ class MessageBuilder:
         return self._strategy.build(**self._params)
 
 
-def create_merza_pattern_message(custom_note: Optional[str] = None) -> str:
-    """Función de conveniencia para construir el mensaje predeterminado con 'merza' y los patrones."""
-    builder = MessageBuilder(MerzaDesignPatternsStrategy())
+def create_technical_report_message(
+    recipient: str = "Merza",
+    developer: str = "Jose Rivero",
+    repo_url: str = "https://github.com/jrivero20/whatsapp_automation",
+    custom_note: Optional[str] = None
+) -> str:
+    """Función de conveniencia para construir el reporte técnico completo."""
+    builder = MessageBuilder(TechnicalReportStrategy())
+    builder.set_recipient(recipient)
+    builder.set_developer(developer)
+    builder.set_repo_url(repo_url)
     if custom_note:
         builder.set_custom_note(custom_note)
     return builder.build()

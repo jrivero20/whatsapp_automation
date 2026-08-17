@@ -19,7 +19,7 @@ if current_dir not in sys.path:
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
-from whatsapp_automation import WhatsAppBotFacade, create_merza_pattern_message
+from whatsapp_automation import WhatsAppBotFacade, create_technical_report_message
 
 
 def load_config():
@@ -69,11 +69,11 @@ def main():
 
     # 2. Determinar tipo de mensaje
     message = args.message or config.get("custom_message")
-    message_mode = config.get("message_mode", "merza_patterns")
+    message_mode = config.get("message_mode", "technical_report")
 
-    if not message and message_mode != "merza_patterns":
+    if not message and message_mode != "technical_report":
         print("\n💬 Opciones de mensaje:")
-        print("1. Mensaje oficial 'merza' con documentación de Patrones de Diseño (Recomendado)")
+        print("1. Reporte Técnico de Patrones de Diseño (Recomendado)")
         print("2. Mensaje personalizado libre")
         opc = input("Selecciona una opción (1/2, por defecto 1): ").strip()
         if opc == "2":
@@ -82,13 +82,16 @@ def main():
     session_dir = args.session_dir or config.get("session_dir", os.path.join(current_dir, "session_data"))
     headless = args.headless or config.get("headless", False)
     wait_time = config.get("wait_time", 2)
+    recipient = config.get("recipient", "Merza")
+    developer = config.get("developer", "Jose Rivero")
+    repo_url = config.get("repo_url", "https://github.com/jrivero20/whatsapp_automation")
     custom_note = config.get("custom_note")
 
     print(f"\n⚙️  Configuración de ejecución:")
     print(f"   • Destinatario: {target}")
     print(f"   • Sesión persistente en: {session_dir}")
     print(f"   • Modo Headless: {'Activado' if headless else 'Desactivado (Visible)'}")
-    print(f"   • Tipo de mensaje: {'Personalizado' if message else 'merza + Patrones de Diseño'}")
+    print(f"   • Tipo de mensaje: {'Personalizado' if message else 'Reporte Técnico (Patrones de Diseño)'}")
     print("-" * 65)
 
     # 3. Ejecución del Bot mediante Facade
@@ -101,7 +104,13 @@ def main():
             if message:
                 bot.send_message(phone=target, message=message)
             else:
-                bot.send_merza_pattern_message(phone=target, custom_note=custom_note)
+                bot.send_technical_report(
+                    phone=target,
+                    recipient=recipient,
+                    developer=developer,
+                    repo_url=repo_url,
+                    custom_note=custom_note
+                )
 
         print("\n" + "=" * 65)
         print("✨ ¡EJECUCIÓN COMPLETADA EXITOSAMENTE! ✨")

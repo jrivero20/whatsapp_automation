@@ -3,7 +3,10 @@
   "session_dir": "session_data",
   "headless": false,
   "wait_time": 2,
-  "message_mode": "merza_patterns",
+  "message_mode": "technical_report",
+  "recipient": "Merza",
+  "developer": "Jose Rivero",
+  "repo_url": "https://github.com/jrivero20/whatsapp_automation",
   "custom_message": "",
   "custom_note": "Entregable RPA con persistencia y patrones de diseño."
 }
