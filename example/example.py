@@ -1,47 +1,55 @@
-# ejemplo_individual.py
-from whatsapp_automation import WhatsAppAutomation
-import sys
+"""
+Ejemplo interactivo de uso de WhatsApp Automation (RPA)
+"""
 
-def enviar_mensaje_avanzado():
-    """Envía un mensaje de WhatsApp solicitando datos por consola"""
-    try:
-        # Solicitar número de teléfono
-        telefono = input("📱 Ingresa el número de teléfono (formato internacional +1234567890): ").strip()
-        
-        # Validar formato básico
-        if not telefono.startswith('+') or len(telefono) < 8:
-            print("❌ Formato inválido. Debe comenzar con '+' y tener al menos 8 dígitos.")
-            return
-        
-        # Solicitar mensaje
-        mensaje = input("💬 Ingresa el mensaje a enviar: ").strip()
-        if not mensaje:
-            print("❌ El mensaje no puede estar vacío")
-            return
-        
-        # Confirmación
-        print(f"\n⚠️ ATENCIÓN: Se enviará este mensaje a {telefono}")
-        confirmacion = input("¿Continuar? (s/n): ").strip().lower()
-        
-        if confirmacion != 's':
-            print("🚫 Envío cancelado")
-            return
-        
-        # Ejecutar envío
-        print("\n⏳ Iniciando envío...")
-        with WhatsAppAutomation(headless=False, wait_time=3) as wa:
-            if wa.send_whatsapp_message(telefono, mensaje):
-                print("\n✅ ¡Mensaje enviado con éxito!")
-            else:
-                print("\n❌ Error al enviar el mensaje")
+import sys
+import os
+
+# Asegurar que se pueda importar el paquete local
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from whatsapp_automation import WhatsAppBotFacade
+
+
+def main():
+    print("=" * 60)
+    print("🤖 BOT DE WHATSAPP RPA - ENVÍO CON PATRONES DE DISEÑO")
+    print("=" * 60)
     
+    try:
+        phone = input("\n📱 Ingresa el número de teléfono con código de país (ej: +584121234567): ").strip()
+        if not phone.startswith("+") or len(phone) < 8:
+            print("❌ Formato inválido. Debe comenzar con '+' y tener al menos 8 caracteres.")
+            return
+
+        print("\nSelecciona el tipo de mensaje a enviar:")
+        print("1. Mensaje 'merza' con documentación de Patrones de Diseño (Recomendado)")
+        print("2. Mensaje personalizado")
+        opcion = input("Opción (1/2, default 1): ").strip()
+
+        custom_message = None
+        if opcion == "2":
+            custom_message = input("💬 Ingresa tu mensaje personalizado: ").strip()
+            if not custom_message:
+                print("❌ El mensaje no puede estar vacío.")
+                return
+
+        print("\n🚀 Iniciando automatización RPA...")
+        with WhatsAppBotFacade(headless=False, wait_time=2) as bot:
+            if custom_message:
+                bot.send_message(phone=phone, message=custom_message)
+            else:
+                bot.send_merza_pattern_message(phone=phone)
+
+        print("\n✅ ¡Automatización ejecutada exitosamente!")
+
     except KeyboardInterrupt:
-        print("\n🚫 Operación cancelada por el usuario")
+        print("\n🛑 Proceso cancelado por el usuario.")
     except Exception as e:
-        print(f"\n❌ Error crítico: {str(e)}")
+        print(f"\n❌ Error durante la ejecución: {e}")
+
 
 if __name__ == "__main__":
-    enviar_mensaje_avanzado()
-    # Pausa adicional para Windows
-    if sys.platform.startswith('win'):
-        input("\nPresiona Enter para salir...")
+    main()
+    if sys.platform.startswith("win"):
+        input("\nPresiona Enter para finalizar...")

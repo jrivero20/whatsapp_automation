@@ -1,0 +1,9 @@
+{
+  "phone": "",
+  "session_dir": "session_data",
+  "headless": false,
+  "wait_time": 2,
+  "message_mode": "merza_patterns",
+  "custom_message": "",
+  "custom_note": "Entregable RPA con persistencia y patrones de diseño."
+}

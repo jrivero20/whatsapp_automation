@@ -1,11 +1,34 @@
 """
-WhatsApp Automation - Librería Python para automatizar WhatsApp Web
+WhatsApp Automation Package - Bot RPA con Patrones de Diseño y Persistencia de Sesión
 """
 
+from .core.bot_facade import WhatsAppBotFacade
+from .core.session_manager import SessionManager
+from .pages.base_page import BasePage
+from .pages.login_page import LoginPage
+from .pages.chat_page import ChatPage
+from .services.message_builder import (
+    MessageBuilder,
+    IMessageStrategy,
+    MerzaDesignPatternsStrategy,
+    CustomMessageStrategy,
+    create_merza_pattern_message
+)
 from .whatsapp_automation import WhatsAppAutomation, send_whatsapp_message
 
-__version__ = "1.0.0"
-__author__ = "Tu Nombre"
-__email__ = "tu.email@ejemplo.com"
+__version__ = "2.0.0"
 
-__all__ = ["WhatsAppAutomation", "send_whatsapp_message"]
+__all__ = [
+    "WhatsAppBotFacade",
+    "SessionManager",
+    "BasePage",
+    "LoginPage",
+    "ChatPage",
+    "MessageBuilder",
+    "IMessageStrategy",
+    "MerzaDesignPatternsStrategy",
+    "CustomMessageStrategy",
+    "create_merza_pattern_message",
+    "WhatsAppAutomation",
+    "send_whatsapp_message",
+]

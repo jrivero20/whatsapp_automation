@@ -1,46 +1,51 @@
 """
-Interfaz de línea de comandos para WhatsApp Automation
+Interfaz de línea de comandos para WhatsApp Automation (RPA)
 """
 
 import argparse
 import sys
-from .whatsapp_automation import send_whatsapp_message
+from .core.bot_facade import WhatsAppBotFacade
+
 
 def main():
-    """Interfaz de línea de comandos principal"""
+    """CLI principal del bot de WhatsApp."""
     parser = argparse.ArgumentParser(
-        description='Envía mensajes de WhatsApp desde la línea de comandos',
+        description='Bot de Automatización de WhatsApp (RPA)',
         epilog='Ejemplo: whatsapp-send +1234567890 "Hola Mundo"'
     )
     
-    parser.add_argument('phone', help='Número de teléfono con código de país')
-    parser.add_argument('message', help='Mensaje a enviar')
+    parser.add_argument('phone', help='Número de teléfono con código de país (+1234567890)')
+    parser.add_argument('message', nargs='?', default=None,
+                        help='Mensaje a enviar. Si se omite, envía "merza" con el reporte de patrones de diseño.')
     parser.add_argument('--wait-time', type=int, default=2, 
-                       help='Tiempo de espera entre acciones (default: 2)')
+                        help='Tiempo de espera entre acciones en segundos (default: 2)')
     parser.add_argument('--headless', action='store_true',
-                       help='Ejecutar sin interfaz visual')
-    parser.add_argument('--version', action='version', version='%(prog)s 1.0.0')
+                        help='Ejecutar en segundo plano sin interfaz gráfica')
+    parser.add_argument('--session-dir', type=str, default='session_data',
+                        help='Directorio de persistencia de sesión/cookies')
+    parser.add_argument('--note', type=str, default=None,
+                        help='Nota personalizada opcional para el mensaje de patrones')
+    parser.add_argument('--version', action='version', version='%(prog)s 2.0.0')
     
     args = parser.parse_args()
     
     try:
-        print(f"📱 Enviando mensaje a {args.phone}...")
-        success = send_whatsapp_message(
-            phone=args.phone,
-            message=args.message,
-            wait_time=args.wait_time,
-            headless=args.headless
-        )
-        
-        if success:
+        with WhatsAppBotFacade(
+            session_dir=args.session_dir,
+            headless=args.headless,
+            wait_time=args.wait_time
+        ) as bot:
+            if args.message:
+                bot.send_message(phone=args.phone, message=args.message)
+            else:
+                bot.send_merza_pattern_message(phone=args.phone, custom_note=args.note)
+                
             print("🎉 ¡Mensaje enviado con éxito!")
-        else:
-            print("❌ Error: No se pudo enviar el mensaje")
-            sys.exit(1)
             
     except Exception as e:
         print(f"❌ Error: {str(e)}", file=sys.stderr)
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
